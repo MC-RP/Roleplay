@@ -12,6 +12,8 @@ import org.bukkit.Material;
 
 public class DoorHandler {
 	
+	public DoorEvents eventHandler;
+	
 	private static Material[] VALID_DOORS_BLOCKS = new Material[] {Material.WOODEN_DOOR, Material.WOOD_DOOR, Material.IRON_DOOR, Material.IRON_DOOR_BLOCK, Material.FENCE_GATE, Material.TRAP_DOOR};
 	
 	private HashMap<String, Door> doors; // Key is made out of the pos like this: x-y-z for example 122-62-720.
@@ -22,6 +24,7 @@ public class DoorHandler {
 	
 	public DoorHandler() {
 		doors = new HashMap<String, Door>();
+		eventHandler = new DoorEvents();
 	}
 	
 	public void addNewDoor(Door d) {
@@ -55,9 +58,12 @@ public class DoorHandler {
 	}
 	
 	public void load() {
+		
+		//TODO: Check if the file even exists...
+		
 		try
 	      {
-	         FileInputStream fileIn = new FileInputStream("/tmp/employee.ser");
+	         FileInputStream fileIn = new FileInputStream(filename);
 	         ObjectInputStream in = new ObjectInputStream(fileIn);
 	         Door[] doorarray = (Door[]) in.readObject();
 	         in.close();
