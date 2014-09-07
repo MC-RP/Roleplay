@@ -1,5 +1,6 @@
 package com.mcrp.roleplay.doors;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 
 public class DoorHandler {
 	
@@ -59,11 +61,14 @@ public class DoorHandler {
 	
 	public void load() {
 		
-		//TODO: Check if the file even exists...
+		File f = new File(filename);
+		if(!f.exists())
+			return;
+		
 		
 		try
 	      {
-	         FileInputStream fileIn = new FileInputStream(filename);
+	         FileInputStream fileIn = new FileInputStream(f);
 	         ObjectInputStream in = new ObjectInputStream(fileIn);
 	         Door[] doorarray = (Door[]) in.readObject();
 	         in.close();
@@ -87,8 +92,19 @@ public class DoorHandler {
 	      }
 	}
 	
+	public boolean isRPDoor(Block b) {
+		
+		return doors.containsKey(keyBlock(b));
+		
+	}
 	
+	public static String keyBlock(Block b) {
+		return b.getX() + "-" + b.getY() + "-" + b.getZ();
+	}
 	
+	public Door getDoorExact(Block b) {
+		return doors.get(keyBlock(b));
+	}
 	
 	public static DoorHandler getInstance() {
 		if(instance == null)
