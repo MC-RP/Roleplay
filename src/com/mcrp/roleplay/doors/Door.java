@@ -27,4 +27,7 @@ public abstract class Door implements Serializable {
 	
 	public abstract DoorType getType();
 	
+	public DoorLocation getPos() {
+		return pos;
+	}
 }
