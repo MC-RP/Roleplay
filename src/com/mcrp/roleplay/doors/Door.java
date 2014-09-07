@@ -4,17 +4,27 @@ import java.io.Serializable;
 
 import org.bukkit.entity.Player;
 
+import com.mcrp.roleplay.doors.types.DoorType;
+
 public abstract class Door implements Serializable {
 	
 	private static final long serialVersionUID = 0L;
-	private String id;
+	
+	private DoorLocation pos;
+	
 	
 	public Door(DoorLocation pos) {
-		id = pos.getEncoded();
+		this.pos = pos;
 	}
 	
-	
-	public boolean canUnlock(Player p) {
-		return true;
+	public String getKey() {
+		return pos.getEncoded();
+		
 	}
+
+	public abstract boolean canUnlock(Player p);
+
+	
+	public abstract DoorType getType();
+	
 }

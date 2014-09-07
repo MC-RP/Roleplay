@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import com.mcrp.roleplay.doors.Door;
 import com.mcrp.roleplay.doors.DoorLocation;
 
-public class OwnedDoor extends Door{
+public abstract class OwnedDoor extends Door{
 
 
 	private static final long serialVersionUID = 1L;
@@ -43,6 +43,5 @@ public class OwnedDoor extends Door{
 			return;
 		coowners.remove(uuid);
 	}
-	
 	
 }

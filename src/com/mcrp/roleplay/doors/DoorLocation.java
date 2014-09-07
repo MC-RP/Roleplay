@@ -51,5 +51,9 @@ public class DoorLocation implements Serializable {
 		return x + "-" + y + "-" + z;
 	}
 	
+	public String toString() {
+		return "(X: " + x + ", Y: " + y + ", Z: " + z + ")";
+		
+	}
 	
 }
