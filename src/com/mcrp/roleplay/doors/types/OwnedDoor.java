@@ -3,10 +3,11 @@ package com.mcrp.roleplay.doors.types;
 
 import java.util.ArrayList;
 
+import com.mcrp.roleplay.doors.CoOwnable;
 import com.mcrp.roleplay.doors.Door;
 import com.mcrp.roleplay.doors.DoorLocation;
 
-public abstract class OwnedDoor extends Door{
+public abstract class OwnedDoor extends Door implements CoOwnable {
 
 
 	private static final long serialVersionUID = 1L;

@@ -27,24 +27,27 @@ public class DoorLocation implements Serializable {
 		return x;
 	}
 
-	public void setX(int x) {
+	public DoorLocation setX(int x) {
 		this.x = x;
+		return this;
 	}
 
 	public int getY() {
 		return y;
 	}
 
-	public void setY(int y) {
+	public DoorLocation setY(int y) {
 		this.y = y;
+		return this;
 	}
 
 	public int getZ() {
 		return z;
 	}
 
-	public void setZ(int z) {
+	public DoorLocation setZ(int z) {
 		this.z = z;
+		return this;
 	}
 	
 	public String getEncoded() {

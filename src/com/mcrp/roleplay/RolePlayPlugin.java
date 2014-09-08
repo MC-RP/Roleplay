@@ -3,6 +3,7 @@ package com.mcrp.roleplay;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.mcrp.roleplay.doors.DoorCommandExecutor;
 import com.mcrp.roleplay.doors.DoorHandler;
 
 public class RolePlayPlugin extends JavaPlugin {
@@ -14,10 +15,12 @@ public class RolePlayPlugin extends JavaPlugin {
 		DoorHandler.getInstance().load(); // Load any existing doors.
 		
 		Bukkit.getPluginManager().registerEvents(DoorHandler.getInstance().eventHandler, this); // Register door events
+	
+		this.getCommand("rpdoor").setExecutor(new DoorCommandExecutor());
 	}
 	
 	public void onDisable() {
-		
+		DoorHandler.getInstance().save();
 	}
 	
 }

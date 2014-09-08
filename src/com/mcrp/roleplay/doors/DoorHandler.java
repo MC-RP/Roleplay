@@ -106,6 +106,23 @@ public class DoorHandler {
 		return doors.get(keyBlock(b));
 	}
 	
+	public Door getDoor(DoorLocation b) {
+		
+		if(doors.containsKey(b.getEncoded()))
+			return doors.get(b.getEncoded());
+		
+		if(doors.containsKey(b.setY(b.getY() + 1).getEncoded()))
+			return doors.get(b.setY(b.getY() + 1).getEncoded());
+		if(doors.containsKey(b.setY(b.getY() - 2).getEncoded()))
+			return doors.get(b.setY(b.getY() - 2).getEncoded());
+		
+		return null;
+	}
+	
+	public boolean isDoorThere(DoorLocation l) {
+		return getDoor(l) == null;
+	}
+	
 	public static DoorHandler getInstance() {
 		if(instance == null)
 			instance = new DoorHandler();
@@ -119,6 +136,12 @@ public class DoorHandler {
 		}
 		
 		return false;
+	}
+
+	public void removeDoor(String encoded) {
+		if(!doors.containsKey(encoded))
+			return;
+		doors.remove(encoded);
 	}
 	
 }

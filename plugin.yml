@@ -2,3 +2,9 @@ name: Roleplay
 author: Fozie
 main: com.mcrp.roleplay.RolePlayPlugin
 version: 001
+commands:
+   rpdoor:
+      description: The RP door command
+      usage: /<command>
+      permission: <plugin name>.rpdoorcommand
+      permission-message: You don't have <permission>
