@@ -1,9 +1,12 @@
 package com.mcrp.roleplay.economy;
 
+import java.io.Serializable;
+
 import org.bukkit.entity.Player;
 
-public interface Buyable {
-	public int getPrice();
-	public void buy(Player p);
-	public void sell(Player p);
+public interface Buyable extends Serializable{
+	public int getBuyPrice();
+	public int getSellPrice();
+	public void onBuy(Player p);
+	public void onSell(Player p);
 }

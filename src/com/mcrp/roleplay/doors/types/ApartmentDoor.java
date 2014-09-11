@@ -1,11 +1,13 @@
 package com.mcrp.roleplay.doors.types;
 
+import java.io.Serializable;
+
 import org.bukkit.entity.Player;
 
 import com.mcrp.roleplay.doors.DoorLocation;
 import com.mcrp.roleplay.economy.Buyable;
 
-public class ApartmentDoor extends OwnedDoor implements Buyable {
+public class ApartmentDoor extends OwnedDoor implements Buyable, Serializable {
 	
 	private static final long serialVersionUID = 2L;
 	private int price;
@@ -16,28 +18,35 @@ public class ApartmentDoor extends OwnedDoor implements Buyable {
 	
 	}
 
+	public boolean canUnlock(Player p) {
+		if(getOwner() == p.getUniqueId().toString()) {
+			setOwnerName(p.getDisplayName());
+			return true;
+		}
+		
+		return this.getCoowners().contains(p.getUniqueId().toString());
+	}
+	
 	@Override
-	public int getPrice() {
+	public void onBuy(Player p) {
+		setOwner(p.getUniqueId().toString());
+		setOwnerName(p.getDisplayName());
+	}
+
+	@Override
+	public void onSell(Player p) {
+		setOwner("None");
+		setOwnerName("None");
+		clearCoOwners();
+	}
+
+	@Override
+	public int getBuyPrice() {
 		return price;
 	}
 
 	@Override
-	public void buy(Player p) {
-				
-	}
-
-	@Override
-	public void sell(Player p) {
-		
-	}
-
-
-	public boolean canUnlock(Player p) {
-		return false;
-	}
-
-	@Override
-	public DoorType getType() {
-		return new DoorType(2,"APARTMENT_DOOR","Apartment Door");
+	public int getSellPrice() {
+		return (int) (price * 0.8);
 	}
 }

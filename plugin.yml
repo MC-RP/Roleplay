@@ -7,4 +7,12 @@ commands:
       description: The RP door command
       usage: /<command>
       permission: <plugin name>.rpdoorcommand
+      permission-message: You don't have <permission>         
+    icanhasbukkit:
+    - "version $1-"
+   money:
+      aliases: [econ, bal]
+      description: The RP door command
+      usage: /<command>
+      permission: <plugin name>.rpdoorcommand
       permission-message: You don't have <permission>

@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
@@ -22,7 +23,7 @@ public class DoorHandler {
 	
 	private static DoorHandler instance;
 	
-	private static final String filename = "RP-DOORS.MCRPDOORS";
+	private static final String filename = "RpDoors.mcrp";
 	
 	public DoorHandler() {
 		doors = new HashMap<String, Door>();
@@ -41,6 +42,14 @@ public class DoorHandler {
 	
 	
 	public void save() {
+		save(filename);
+	}
+	
+	public void save(String filename) {
+		if(doors.size() == 0) {
+			 Bukkit.getLogger().info("[RP] No doors to save continuing..");
+			return;
+		}
 		 try
         {
 			   Bukkit.getLogger().info("[RP] Saving doors...");
@@ -48,7 +57,7 @@ public class DoorHandler {
                FileOutputStream fos = new FileOutputStream(filename);
                ObjectOutputStream oos = new ObjectOutputStream(fos);
                
-               oos.writeObject(((Door[])doors.values().toArray()));
+               oos.writeObject(doors.values().toArray());
                
                oos.close();
                fos.close();
@@ -59,8 +68,8 @@ public class DoorHandler {
          }
 	}
 	
+	@SuppressWarnings("resource")
 	public void load() {
-		
 		File f = new File(filename);
 		if(!f.exists())
 			return;
@@ -70,18 +79,22 @@ public class DoorHandler {
 	      {
 	         FileInputStream fileIn = new FileInputStream(f);
 	         ObjectInputStream in = new ObjectInputStream(fileIn);
-	         Door[] doorarray = (Door[]) in.readObject();
+	         Object[] objs = (Object[]) in.readObject();
+	       
+	         if(objs.length == 0)
+	        	 return;
+	         
 	         in.close();
 	         fileIn.close();
 	         
-	         if(doorarray.length == 0)
-	        	 return;
+	         Door[] a = Arrays.copyOf(objs, objs.length, Door[].class);
 	         
-	         for(Door d : doorarray) addNewDoor(d);
+	         for(Door d : a) addNewDoor(d);
 	         
 	         
 	      }catch(IOException i)
 	      {
+	    	 Bukkit.getLogger().info("ERROR IO EXCEPTION CASTED AT DoorHandler.load");
 	         i.printStackTrace();
 	         return;
 	      }catch(ClassNotFoundException c)
@@ -106,6 +119,37 @@ public class DoorHandler {
 		return doors.get(keyBlock(b));
 	}
 	
+	public Door fromKey(String k) {
+		if(doors.containsKey(k))
+			return doors.get(k);
+		
+		
+		return null;
+		
+	}
+	
+	public boolean validateKey(String k) {
+		return doors.containsKey(k);
+	}
+	
+	public String getDoorKey(DoorLocation l) {
+		
+		int x = l.getX(), y = l.getY(), z = l.getZ();
+		
+		if(doors.containsKey(l.getEncoded()))
+			return l.getEncoded();
+		
+		if(doors.containsKey(createKey(x,y + 1,z)))
+			return createKey(x,y + 1,z);
+		
+		if(doors.containsKey(createKey(x,y - 1,z)))
+			return createKey(x,y + 1,z);
+		
+				
+		
+		return "NULL";
+	}
+	
 	public Door getDoor(DoorLocation b) {
 		
 		if(doors.containsKey(b.getEncoded()))
@@ -113,6 +157,7 @@ public class DoorHandler {
 		
 		if(doors.containsKey(b.setY(b.getY() + 1).getEncoded()))
 			return doors.get(b.setY(b.getY() + 1).getEncoded());
+		
 		if(doors.containsKey(b.setY(b.getY() - 2).getEncoded()))
 			return doors.get(b.setY(b.getY() - 2).getEncoded());
 		
@@ -142,6 +187,10 @@ public class DoorHandler {
 		if(!doors.containsKey(encoded))
 			return;
 		doors.remove(encoded);
+	}
+	
+	public static String createKey(int x, int y, int z) {
+		return x + "-" + y + "-" + z;
 	}
 	
 }

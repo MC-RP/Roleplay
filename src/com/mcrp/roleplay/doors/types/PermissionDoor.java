@@ -27,9 +27,4 @@ public class PermissionDoor extends Door{
 		this.permission = permission;
 	}
 
-	@Override
-	public DoorType getType() {
-		return new DoorType(6,"PERMISSION_DOOR", "Permission Door");
-	}
-
 }

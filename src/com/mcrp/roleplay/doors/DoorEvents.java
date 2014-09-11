@@ -10,42 +10,48 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.material.MaterialData;
-import org.bukkit.material.Openable;
 
 public class DoorEvents implements Listener {
 	
 	private final String TAG = ChatColor.RESET +"[" + ChatColor.RED + "RP" + ChatColor.RESET + "]";
 	
 	
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.HIGH)
 	public void onDestroy(BlockBreakEvent e) {
-		if(e.isCancelled())
-			return;
-		if(!DoorHandler.isValidDoor(e.getBlock().getType()))
-			return;
-		if(DoorHandler.getInstance().getDoor(new DoorLocation(e.getBlock())) == null) {
+			if(!DoorHandler.isValidDoor(e.getBlock().getType()))
+				return;
+		
+			String finalKey = DoorHandler.getInstance().getDoorKey(new DoorLocation(e.getBlock()));
+			
+			if(finalKey.equals("NULL"))
+				return;
+
+			
 			e.setCancelled(true);
-			e.getPlayer().sendMessage(ChatColor.RED + "Delete the rp door with /rpdoor remove first!");
+			if(e.getPlayer().isOp()) 
+				e.getPlayer().sendMessage(ChatColor.RED + "Delete the rp door with /rpdoor remove first!");
 			return;
-		}
 	}
 	
-	@EventHandler (priority = EventPriority.HIGH) 
-	public void playerRightClick(PlayerInteractEvent e) { // Only on right click a door.
+	@SuppressWarnings("deprecation")
+	@EventHandler (priority = EventPriority.HIGHEST) 
+	public void playerClickBlock(PlayerInteractEvent e) {
 		if(!e.hasBlock())
 			return;
 		if(!DoorHandler.isValidDoor(e.getClickedBlock().getType()))
 			return;
 		
-		Door d = DoorHandler.getInstance().getDoor(new DoorLocation(e.getClickedBlock()));
-		if(d == null) {
-			return;
-		}
+		String finalKey = DoorHandler.getInstance().getDoorKey(new DoorLocation(e.getClickedBlock()));
 		
+		if(finalKey.equals("NULL"))
+			return;
+		
+		Door d = DoorHandler.getInstance().fromKey(finalKey);
+				
 		if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {		
 			if(d.isLocked()) {
 				e.setCancelled(true);
+				e.getPlayer().sendMessage(TAG + ChatColor.RED + "This door is currently locked!");
 				return;
 			}
 			else
@@ -54,11 +60,12 @@ public class DoorEvents implements Listener {
 						return;
 					
 					BlockState state = getRealDoor(e.getClickedBlock()).getState();
-					MaterialData data = state.getData();
-					if(!(data instanceof Openable))
-						return;
-					Openable open = (Openable) data;
-					open.setOpen(switchBool(open.isOpen()));
+					
+					
+					org.bukkit.material.Door door = (org.bukkit.material.Door) state;
+					door.setOpen(switchBool(door.isOpen()));
+					
+					e.getPlayer().getPlayer().sendMessage(door.isOpen() + "");
 					
 					return;
 				}
@@ -71,12 +78,15 @@ public class DoorEvents implements Listener {
 			else {
 				if(d.canUnlock(e.getPlayer()))
 					d.switchLock();
-				else
+				else {
 					e.getPlayer().sendMessage(TAG + ChatColor.RED + " This door is not yours to open.");
+					return;
+				}
+					
 				if(d.isLocked())
-					e.getPlayer().sendMessage(TAG + ChatColor.GREEN + " You Unlocked this door.");
-				else
 					e.getPlayer().sendMessage(TAG + ChatColor.GREEN + " You " + ChatColor.RED + "Locked" + ChatColor.GREEN +" this door.");
+				else
+					e.getPlayer().sendMessage(TAG + ChatColor.GREEN + " You Unlocked this door.");
 			}
 			
 		}
