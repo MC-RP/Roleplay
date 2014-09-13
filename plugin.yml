@@ -5,14 +5,15 @@ version: 001
 commands:
    rpdoor:
       description: The RP door command
-      usage: /<command>
-      permission: <plugin name>.rpdoorcommand
-      permission-message: You don't have <permission>         
+      usage: /<command>       
     icanhasbukkit:
     - "version $1-"
    money:
-      aliases: [econ, bal]
-      description: The RP door command
+      description: Main economy command
       usage: /<command>
-      permission: <plugin name>.rpdoorcommand
-      permission-message: You don't have <permission>
+   econ:
+      description: Same as /money.
+      usage: /<command>
+   bal:
+      description: Shows players balances, only that.
+      usage: /<command>
