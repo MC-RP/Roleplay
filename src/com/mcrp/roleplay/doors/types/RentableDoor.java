@@ -12,8 +12,8 @@ public class RentableDoor extends OwnedDoor implements Rentable{
 		this.price = price;
 		this.rentPeriod = rentTime;
 		this.elapsedTime = 0;
-		
 	}
+	
 	private static final long serialVersionUID = 4L;
 
 	private int price;
@@ -57,7 +57,7 @@ public class RentableDoor extends OwnedDoor implements Rentable{
 	
 	@Override
 	public boolean isAvaliable() {
-		return this.getOwner().equalsIgnoreCase("None")
+		return this.getOwner().equalsIgnoreCase("None");
 	}
 
 }

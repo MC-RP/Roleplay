@@ -7,16 +7,11 @@ import com.mcrp.roleplay.economy.Buyable;
 
 public class ApartmentRentableDoor extends RentableDoor implements Buyable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	private boolean isAvaliableForRent;
 	
-	public ApartmentRentableDoor(DoorLocation b, String owner) {
-		super(b, owner);
-		// TODO Auto-
+	public ApartmentRentableDoor(DoorLocation b, int price, int time) {
+		super(b, price, time);
 	}
 
 	@Override
@@ -39,7 +34,6 @@ public class ApartmentRentableDoor extends RentableDoor implements Buyable{
 
 	@Override
 	public void onSell(Player p) {
-		// TODO Auto-generated method stub
 		
 	}
 }
